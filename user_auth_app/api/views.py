@@ -53,3 +53,13 @@ class LogoutView(APIView):
     def post(self, request):
         Token.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MeView(APIView):
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'user_id': user.id,
+            'email': user.email,
+            'full_name': user.first_name,
+        })
