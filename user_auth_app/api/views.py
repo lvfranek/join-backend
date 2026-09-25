@@ -46,3 +46,10 @@ class LoginView(APIView):
             'email': user.email,
             'full_name': user.first_name,
         }, status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+
+    def post(self, request):
+        Token.objects.filter(user=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
