@@ -1,5 +1,7 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
+
 
 
 class RegistrationSerializer(serializers.Serializer):
@@ -27,3 +29,14 @@ class RegistrationSerializer(serializers.Serializer):
             password=validated_data['password'],
             first_name=validated_data['full_name'],
         )
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(username=data['email'], password=data['password'])
+        if user is None:
+            raise serializers.ValidationError('Invalid email or password.')
+        data['user'] = user
+        return data
