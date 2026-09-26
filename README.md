@@ -16,6 +16,7 @@ REST API for **Join**, a Kanban-style task manager. It handles user accounts, co
 - [Project Structure](#project-structure)
 - [Data Model](#data-model)
 - [Deployment](#deployment)
+- [License](#license)
 
 ## Tech Stack
 
@@ -190,3 +191,7 @@ Deleting a user also deletes their contacts and tasks.
 ## Deployment
 
 The API runs with Gunicorn behind Nginx on a Google Cloud VM, at `https://join-api.franekkaminski.dev`. In production, set `DEBUG=False` and point `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` at the real domains.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
