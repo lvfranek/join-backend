@@ -191,7 +191,26 @@ Deleting a user also deletes their contacts and tasks.
 
 ## Deployment
 
-The API runs with Gunicorn behind Nginx on a Google Cloud VM, at `https://join-api.franekkaminski.dev`. In production, set `DEBUG=False`, point `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS` at the real domains, and run `python manage.py collectstatic` so Nginx can serve the admin's static files from `staticfiles/`.
+The API runs on a Google Cloud VM at [join-api.franekkaminski.dev](https://join-api.franekkaminski.dev/api/). The frontend is hosted separately on Vercel, see the [frontend README](https://github.com/lvfranek/Join#deployment).
+
+```
+Browser ──HTTPS── Nginx ──── Gunicorn (127.0.0.1:8001) ──── Django
+                    └── /static/ served directly from staticfiles/
+```
+
+- **Gunicorn** runs Django as a systemd service, so it starts on boot and restarts after a crash.
+- **Nginx** forwards requests to Gunicorn, serves the static files for the admin and the browsable API, and handles HTTPS with a Let's Encrypt certificate from certbot.
+- **Production `.env`**: `DEBUG=False`, a separate `SECRET_KEY`, and `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS` set to the real domains.
+
+To update the server after pushing changes:
+
+```bash
+git pull
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+sudo systemctl restart join-backend
+```
 
 ## License
 
