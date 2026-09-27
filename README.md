@@ -104,6 +104,7 @@ All variables live in `.env` in the project root (see `.env.example`).
 | `DEBUG` | `True` for local development, `False` in production | `True` |
 | `ALLOWED_HOSTS` | Comma-separated host names the server answers to | `localhost,127.0.0.1` |
 | `CORS_ALLOWED_ORIGINS` | Comma-separated origins allowed to call the API (the frontend URL) | `http://localhost:4200,http://127.0.0.1:4200` |
+| `CSRF_TRUSTED_ORIGINS` | Comma-separated HTTPS origins allowed to submit forms (needed for the admin in production). Leave empty locally. | `https://join-api.franekkaminski.dev` |
 
 ## API Endpoints
 
@@ -190,7 +191,7 @@ Deleting a user also deletes their contacts and tasks.
 
 ## Deployment
 
-The API runs with Gunicorn behind Nginx on a Google Cloud VM, at `https://join-api.franekkaminski.dev`. In production, set `DEBUG=False` and point `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` at the real domains.
+The API runs with Gunicorn behind Nginx on a Google Cloud VM, at `https://join-api.franekkaminski.dev`. In production, set `DEBUG=False`, point `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS` at the real domains, and run `python manage.py collectstatic` so Nginx can serve the admin's static files from `staticfiles/`.
 
 ## License
 
